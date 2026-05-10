@@ -18,10 +18,10 @@ function ontraportHeaders() {
   };
 }
 
-async function ontraport(path, params) {
+async function ontraport(path, params, method = "POST") {
   const body = new URLSearchParams(params).toString();
   const res = await fetch(`${ONTRAPORT_BASE}${path}`, {
-    method: "POST",
+    method,
     headers: ontraportHeaders(),
     body,
   });
@@ -83,12 +83,11 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Subscribe to the welcome campaign
-    await ontraport("/objects/subscribe", {
-      objectID: 0,
-      ids: contactId,
-      add_list: CAMPAIGN_ID,
-    });
+    // 2) Subscribe to the welcome campaign via Campaign Builder
+    await ontraport("/CampaignBuilderItems/subscribe", {
+      contact_id: contactId,
+      sequence: CAMPAIGN_ID,
+    }, "PUT");
 
     return res.status(200).json({ ok: true, contactId });
   } catch (err) {
