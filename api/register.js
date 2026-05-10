@@ -9,6 +9,7 @@
 
 const ONTRAPORT_BASE = "https://api.ontraport.com/1";
 const CAMPAIGN_ID = process.env.ONTRAPORT_CAMPAIGN_ID || "255";
+const CAMPAIGN_TAG_ID = process.env.ONTRAPORT_CAMPAIGN_TAG_ID || "398";
 
 function ontraportHeaders() {
   return {
@@ -85,11 +86,14 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Look up the tag ID for "Apr 2026 Coherent Wealth"
-    const tagsRes = await ontraport("/Tags", { search: "Apr 2026 Coherent Wealth", searchNotes: 0 }, "GET").catch(() => null);
-    console.log("Tags lookup", JSON.stringify(tagsRes));
+    // 2) Add the campaign tag — this triggers the "Tag Added" entry in Campaign Builder
+    await ontraport("/Objects/tag", {
+      objectID: 0,
+      ids: contactId,
+      add_list: CAMPAIGN_TAG_ID,
+    }, "PUT");
 
-    return res.status(200).json({ ok: true, contactId, tagsRes });
+    return res.status(200).json({ ok: true, contactId });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
