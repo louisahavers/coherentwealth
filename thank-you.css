@@ -1,0 +1,328 @@
+/* ============================================================
+   Coherent Wealth — Thank You page
+   Layered on top of styles.css
+   ============================================================ */
+
+.ty-body { background: var(--paper); }
+
+/* ---------- Hero ---------- */
+.ty-hero {
+  position: relative;
+  background: var(--navy-deep);
+  color: var(--cream);
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(140px, 18vh, 200px) clamp(20px, 4vw, 56px) clamp(80px, 12vw, 140px);
+}
+.ty-hero__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 30%, var(--gold-glow), transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 110%, rgba(245, 146, 41, 0.08), transparent 70%);
+}
+.ty-hero__shell {
+  position: relative;
+  z-index: 1;
+  max-width: 880px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ty-hero__mark {
+  position: relative;
+  width: clamp(180px, 22vw, 240px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto 36px;
+  border-radius: 4px;
+  overflow: visible;
+}
+.ty-hero__mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  box-shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.7);
+}
+.ty-hero__mark-corner {
+  position: absolute;
+  width: 22px; height: 22px;
+  border: 1px solid var(--gold-soft);
+  opacity: 0.7;
+  z-index: 1;
+}
+.ty-hero__mark-corner.tl { top: -8px; left: -8px; border-right: 0; border-bottom: 0; }
+.ty-hero__mark-corner.br { bottom: -8px; right: -8px; border-left: 0; border-top: 0; }
+
+.ty-hero__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(72px, 11vw, 168px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin: 24px 0 32px;
+  color: var(--cream);
+}
+.ty-hero__title em {
+  font-style: italic;
+  background: linear-gradient(180deg, var(--gold-bright) 30%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ty-hero__sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(19px, 1.7vw, 24px);
+  line-height: 1.5;
+  color: var(--cream-soft);
+  opacity: 0.9;
+  max-width: 640px;
+  margin: 0 auto 56px;
+}
+.ty-hero__sub strong {
+  font-weight: 500;
+  color: var(--gold-bright);
+  font-style: italic;
+}
+
+/* Countdown */
+.ty-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--navy-line);
+  border: 1px solid var(--navy-line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 auto 36px;
+  max-width: 560px;
+}
+.ty-countdown__cell {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 24px 16px;
+  text-align: center;
+}
+.ty-countdown__num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(38px, 4.4vw, 56px);
+  line-height: 1;
+  color: var(--gold-bright);
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+.ty-countdown__label {
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-soft);
+  opacity: 0.7;
+  margin-top: 8px;
+  display: block;
+}
+
+.ty-hero__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: var(--gold-bright);
+  margin-top: 16px;
+}
+.ty-hero__sep { opacity: 0.4; }
+
+/* ---------- Steps ---------- */
+.ty-steps { background: var(--paper); }
+.ty-steps__head {
+  text-align: center;
+  margin-bottom: var(--space-block);
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ty-steps__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--navy);
+  margin: 16px 0 0;
+  text-wrap: balance;
+}
+.ty-steps__title em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.ty-step {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  padding: clamp(48px, 6vw, 80px) 0;
+  border-top: 1px solid rgba(11, 22, 50, 0.12);
+  align-items: start;
+}
+.ty-step:last-child { border-bottom: 1px solid rgba(11, 22, 50, 0.12); }
+@media (max-width: 720px) {
+  .ty-step { grid-template-columns: 1fr; gap: 16px; }
+}
+
+.ty-step__num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(56px, 7vw, 96px);
+  line-height: 1;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+}
+
+.ty-step__body { max-width: 640px; }
+.ty-step__body h3 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(30px, 3.4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--navy);
+  margin: 14px 0 20px;
+  text-wrap: balance;
+}
+.ty-step__body p {
+  font-size: clamp(16px, 1.15vw, 18px);
+  line-height: 1.7;
+  color: rgba(11, 22, 50, 0.82);
+  margin: 0 0 24px;
+}
+.ty-step__body p strong {
+  color: var(--navy);
+  font-weight: 600;
+}
+.ty-step__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  margin-top: 28px;
+}
+.ty-step__actions .btn--ghost {
+  border-color: rgba(11, 22, 50, 0.25);
+  color: var(--navy);
+}
+.ty-step__actions .btn--ghost:hover {
+  background: rgba(11, 22, 50, 0.04);
+}
+.ty-step__note {
+  margin-top: 20px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(11, 22, 50, 0.55);
+}
+
+.ty-step--quiet .ty-step__num { color: var(--gold-bright); }
+
+/* Quote inside step three */
+.ty-quote {
+  position: relative;
+  margin: 36px 0 36px;
+  padding: 28px 32px 28px 36px;
+  border-left: 2px solid var(--gold);
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.4;
+  color: var(--navy);
+  background: linear-gradient(90deg, rgba(212, 173, 66, 0.06), transparent 80%);
+  text-wrap: balance;
+}
+.ty-quote__mark {
+  font-size: 60px;
+  color: var(--gold);
+  line-height: 0;
+  margin-right: 4px;
+  vertical-align: -10px;
+}
+
+.ty-step__close {
+  margin-top: 32px !important;
+  font-style: italic;
+  font-family: var(--serif);
+  font-size: clamp(18px, 1.4vw, 21px) !important;
+  color: var(--navy) !important;
+}
+.ty-signature {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 36px;
+  color: var(--gold);
+  margin-top: 18px;
+  line-height: 1;
+}
+
+/* ---------- Final note ---------- */
+.ty-final {
+  background: var(--navy-deep);
+  color: var(--cream);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px, 10vw, 140px) clamp(20px, 4vw, 56px);
+}
+.ty-final__glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, var(--gold-glow), transparent 70%);
+  pointer-events: none;
+}
+.ty-final__shell {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.ty-final h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 18px 0 22px;
+  color: var(--cream);
+}
+.ty-final h2 em {
+  color: var(--gold-bright);
+  font-style: italic;
+}
+.ty-final__sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--cream-soft);
+  opacity: 0.85;
+  line-height: 1.5;
+  margin: 0;
+}
+.ty-final__sub strong {
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+.ty-mail {
+  color: var(--gold-bright);
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.9em;
+  letter-spacing: 0.04em;
+}
