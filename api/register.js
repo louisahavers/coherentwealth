@@ -85,8 +85,9 @@ module.exports = async function handler(req, res) {
 
     // 2) Subscribe to the welcome campaign via Campaign Builder
     await ontraport("/CampaignBuilderItems/subscribe", {
-      contact_id: contactId,
-      sequence: CAMPAIGN_ID,
+      objectID: 0,
+      ids: contactId,
+      add_list: CAMPAIGN_ID,
     }, "PUT");
 
     return res.status(200).json({ ok: true, contactId });
