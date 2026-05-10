@@ -85,14 +85,14 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Fetch campaign builder items to find the correct item ID
-    const itemsRes = await ontraport("/CampaignBuilderItems", {
-      objectID: 0,
-      campaign_id: CAMPAIGN_ID,
-    }, "GET");
-    console.log("CampaignBuilderItems", JSON.stringify(itemsRes));
+    // 2) Fetch specific campaign builder item 255 and next page
+    const [item255, page2] = await Promise.all([
+      ontraport("/CampaignBuilderItems/255", {}, "GET"),
+      ontraport("/CampaignBuilderItems", { objectID: 0, start: 50, range: 50 }, "GET"),
+    ]);
+    const cwItems = (page2?.data || []).filter(i => i.name && i.name.toLowerCase().includes("coherent"));
 
-    return res.status(200).json({ ok: true, contactId, itemsRes });
+    return res.status(200).json({ ok: true, contactId, item255, cwItems, page2names: (page2?.data || []).map(i => `${i.id}: ${i.name}`) });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
