@@ -85,14 +85,21 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Fetch specific campaign builder item 255 and next page
-    const [item255, page2] = await Promise.all([
-      ontraport("/CampaignBuilderItems/255", {}, "GET"),
-      ontraport("/CampaignBuilderItems", { objectID: 0, start: 50, range: 50 }, "GET"),
+    // 2) Fetch all campaign builder items across pages to find the Coherent Wealth campaign
+    const [page1, page2, page3] = await Promise.all([
+      ontraport("/CampaignBuilderItems", { objectID: 0, start: 0,  range: 50 }, "GET").catch(e => ({ error: e.message })),
+      ontraport("/CampaignBuilderItems", { objectID: 0, start: 50, range: 50 }, "GET").catch(e => ({ error: e.message })),
+      ontraport("/CampaignBuilderItems", { objectID: 0, start: 100, range: 50 }, "GET").catch(e => ({ error: e.message })),
     ]);
-    const cwItems = (page2?.data || []).filter(i => i.name && i.name.toLowerCase().includes("coherent"));
+    const allItems = [
+      ...(page1?.data || []),
+      ...(page2?.data || []),
+      ...(page3?.data || []),
+    ];
+    const cwItems = allItems.filter(i => i.name && i.name.toLowerCase().includes("coherent"));
+    const item255 = allItems.find(i => i.id === "255");
 
-    return res.status(200).json({ ok: true, contactId, item255, cwItems, page2names: (page2?.data || []).map(i => `${i.id}: ${i.name}`) });
+    return res.status(200).json({ ok: true, contactId, cwItems, item255, totalFound: allItems.length });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
