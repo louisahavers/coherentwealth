@@ -84,13 +84,15 @@ module.exports = async function handler(req, res) {
     }
 
     // 2) Subscribe to the welcome campaign via Campaign Builder
-    await ontraport("/CampaignBuilderItems/subscribe", {
+    const subscribeRes = await ontraport("/CampaignBuilderItems/subscribe", {
       objectID: 0,
       ids: contactId,
       add_list: CAMPAIGN_ID,
     }, "PUT");
 
-    return res.status(200).json({ ok: true, contactId });
+    console.log("Subscribe response", JSON.stringify(subscribeRes));
+
+    return res.status(200).json({ ok: true, contactId, subscribeRes });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
