@@ -19,11 +19,13 @@ function ontraportHeaders() {
 }
 
 async function ontraport(path, params, method = "POST") {
-  const body = new URLSearchParams(params).toString();
-  const res = await fetch(`${ONTRAPORT_BASE}${path}`, {
+  const isGet = method === "GET";
+  const qs = isGet && params ? "?" + new URLSearchParams(params).toString() : "";
+  const body = isGet ? undefined : new URLSearchParams(params || {}).toString();
+  const res = await fetch(`${ONTRAPORT_BASE}${path}${qs}`, {
     method,
     headers: ontraportHeaders(),
-    body,
+    ...(isGet ? {} : { body }),
   });
   const text = await res.text();
   let json;
@@ -83,14 +85,14 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Subscribe to the welcome campaign via Campaign Builder
-    await ontraport("/CampaignBuilderItems/subscribe", {
+    // 2) Fetch campaign builder items to find the correct item ID
+    const itemsRes = await ontraport("/CampaignBuilderItems", {
       objectID: 0,
-      ids: contactId,
-      add_list: CAMPAIGN_ID,
-    }, "PUT");
+      campaign_id: CAMPAIGN_ID,
+    }, "GET");
+    console.log("CampaignBuilderItems", JSON.stringify(itemsRes));
 
-    return res.status(200).json({ ok: true, contactId });
+    return res.status(200).json({ ok: true, contactId, itemsRes });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
