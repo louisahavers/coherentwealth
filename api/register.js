@@ -93,6 +93,6 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, contactId });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
-    return res.status(500).json({ error: "Registration failed. Please try again.", _debug: { message: err.message, status: err.status, body: err.body } });
+    return res.status(500).json({ error: "Registration failed. Please try again." });
   }
 };
