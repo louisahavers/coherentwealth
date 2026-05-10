@@ -85,14 +85,11 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Subscribe to the welcome campaign via Campaign Builder
-    await ontraport("/CampaignBuilderItems/subscribe", {
-      objectID: 0,
-      ids: contactId,
-      add_list: CAMPAIGN_ID,
-    }, "PUT");
+    // 2) Look up the tag ID for "Apr 2026 Coherent Wealth"
+    const tagsRes = await ontraport("/Tags", { search: "Apr 2026 Coherent Wealth", searchNotes: 0 }, "GET").catch(() => null);
+    console.log("Tags lookup", JSON.stringify(tagsRes));
 
-    return res.status(200).json({ ok: true, contactId });
+    return res.status(200).json({ ok: true, contactId, tagsRes });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
