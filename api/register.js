@@ -85,21 +85,14 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Could not create contact" });
     }
 
-    // 2) Fetch all campaign builder items across pages to find the Coherent Wealth campaign
-    const [page1, page2, page3] = await Promise.all([
-      ontraport("/CampaignBuilderItems", { objectID: 0, start: 0,  range: 50 }, "GET").catch(e => ({ error: e.message })),
-      ontraport("/CampaignBuilderItems", { objectID: 0, start: 50, range: 50 }, "GET").catch(e => ({ error: e.message })),
-      ontraport("/CampaignBuilderItems", { objectID: 0, start: 100, range: 50 }, "GET").catch(e => ({ error: e.message })),
-    ]);
-    const allItems = [
-      ...(page1?.data || []),
-      ...(page2?.data || []),
-      ...(page3?.data || []),
-    ];
-    const cwItems = allItems.filter(i => i.name && i.name.toLowerCase().includes("coherent"));
-    const item255 = allItems.find(i => i.id === "255");
+    // 2) Subscribe to the welcome campaign via Campaign Builder
+    await ontraport("/CampaignBuilderItems/subscribe", {
+      objectID: 0,
+      ids: contactId,
+      add_list: CAMPAIGN_ID,
+    }, "PUT");
 
-    return res.status(200).json({ ok: true, contactId, cwItems, item255, totalFound: allItems.length });
+    return res.status(200).json({ ok: true, contactId });
   } catch (err) {
     console.error("Register handler failed", err, err.body);
     return res.status(500).json({ error: "Registration failed. Please try again." });
